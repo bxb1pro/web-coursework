@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace DigitalGamesMarketplace.Models
 {
@@ -11,6 +12,7 @@ namespace DigitalGamesMarketplace.Models
         public string Genre { get; set; }
         public int DeveloperId { get; set; } // FK for Developer
 
+        [JsonIgnore]
         public Developer? Developer { get; set; } // Link to Developer (FK)
     }
 }

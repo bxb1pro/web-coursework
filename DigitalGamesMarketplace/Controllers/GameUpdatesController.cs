@@ -11,47 +11,47 @@ namespace DigitalGamesMarketplace.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RolesController : ControllerBase
+    public class GameUpdatesController : ControllerBase
     {
         private readonly MarketplaceContext _context;
 
-        public RolesController(MarketplaceContext context)
+        public GameUpdatesController(MarketplaceContext context)
         {
             _context = context;
         }
 
-        // GET: api/Roles
+        // GET: api/GameUpdates
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
+        public async Task<ActionResult<IEnumerable<GameUpdate>>> GetGameUpdates()
         {
-            return await _context.Roles.ToListAsync();
+            return await _context.GameUpdates.ToListAsync();
         }
 
-        // GET: api/Roles/5
+        // GET: api/GameUpdates/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Role>> GetRole(int id)
+        public async Task<ActionResult<GameUpdate>> GetGameUpdate(int id)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var gameUpdate = await _context.GameUpdates.FindAsync(id);
 
-            if (role == null)
+            if (gameUpdate == null)
             {
                 return NotFound();
             }
 
-            return role;
+            return gameUpdate;
         }
 
-        // PUT: api/Roles/5
+        // PUT: api/GameUpdates/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRole(int id, Role role)
+        public async Task<IActionResult> PutGameUpdate(int id, GameUpdate gameUpdate)
         {
-            if (id != role.RoleId)
+            if (id != gameUpdate.GameUpdateId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(role).State = EntityState.Modified;
+            _context.Entry(gameUpdate).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace DigitalGamesMarketplace.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RoleExists(id))
+                if (!GameUpdateExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace DigitalGamesMarketplace.Controllers
             return NoContent();
         }
 
-        // POST: api/Roles
+        // POST: api/GameUpdates
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Role>> PostRole(Role role)
+        public async Task<ActionResult<GameUpdate>> PostGameUpdate(GameUpdate gameUpdate)
         {
-            _context.Roles.Add(role);
+            _context.GameUpdates.Add(gameUpdate);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRole", new { id = role.RoleId }, role);
+            return CreatedAtAction("GetGameUpdate", new { id = gameUpdate.GameUpdateId }, gameUpdate);
         }
 
-        // DELETE: api/Roles/5
+        // DELETE: api/GameUpdates/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRole(int id)
+        public async Task<IActionResult> DeleteGameUpdate(int id)
         {
-            var role = await _context.Roles.FindAsync(id);
-            if (role == null)
+            var gameUpdate = await _context.GameUpdates.FindAsync(id);
+            if (gameUpdate == null)
             {
                 return NotFound();
             }
 
-            _context.Roles.Remove(role);
+            _context.GameUpdates.Remove(gameUpdate);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool RoleExists(int id)
+        private bool GameUpdateExists(int id)
         {
-            return _context.Roles.Any(e => e.RoleId == id);
+            return _context.GameUpdates.Any(e => e.GameUpdateId == id);
         }
     }
 }

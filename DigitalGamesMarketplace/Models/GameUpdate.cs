@@ -3,11 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace DigitalGamesMarketplace.Models
 {
-    public class GameLicense
+    public class GameUpdate
     {
-        public int GameLicenseId { get; set; } 
+        public int GameUpdateId { get; set; } 
         public int GameId { get; set; } // FK to Game
-        public string LicenseKey { get; set; }
+        public string Version { get; set; }
 
         [JsonIgnore]
         public Game? Game { get; set; } // Link to Game (FK)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace DigitalGamesMarketplace.Models
 {
@@ -8,6 +9,7 @@ namespace DigitalGamesMarketplace.Models
         public string Name { get; set; }
         public string ContactEmail { get; set; }
 
+        [JsonIgnore]
         public List<Game>? Games { get; set; } // Link to Game (one to many)
     }
 }

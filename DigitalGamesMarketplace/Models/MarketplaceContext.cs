@@ -10,12 +10,11 @@ namespace DigitalGamesMarketplace.Models
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Developer> Developers { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<GameLicense> GameLicenses { get; set; }
+        public DbSet<GameUpdate> GameUpdates { get; set; }
     }
 }

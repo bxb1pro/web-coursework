@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalGamesMarketplace.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20240227002726_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240227175842_IdentityAdded")]
+    partial class IdentityAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,16 +82,31 @@ namespace DigitalGamesMarketplace.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("GameLicenseId");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("GameLicenses");
+                });
+
+            modelBuilder.Entity("DigitalGamesMarketplace.Models.GameUpdate", b =>
+                {
+                    b.Property<int>("GameUpdateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("GameUpdateId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("GameUpdates");
                 });
 
             modelBuilder.Entity("DigitalGamesMarketplace.Models.Review", b =>
@@ -109,31 +124,11 @@ namespace DigitalGamesMarketplace.Migrations
                     b.Property<DateTime>("ReviewDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ReviewId");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("DigitalGamesMarketplace.Models.Role", b =>
-                {
-                    b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("RoleId");
-
-                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("DigitalGamesMarketplace.Models.Transaction", b =>
@@ -151,43 +146,11 @@ namespace DigitalGamesMarketplace.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("TransactionId");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Transactions");
-                });
-
-            modelBuilder.Entity("DigitalGamesMarketplace.Models.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("JoinDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("UserId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -401,15 +364,18 @@ namespace DigitalGamesMarketplace.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DigitalGamesMarketplace.Models.User", "User")
+                    b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("DigitalGamesMarketplace.Models.GameUpdate", b =>
+                {
+                    b.HasOne("DigitalGamesMarketplace.Models.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DigitalGamesMarketplace.Models.Review", b =>
@@ -420,15 +386,7 @@ namespace DigitalGamesMarketplace.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DigitalGamesMarketplace.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Game");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DigitalGamesMarketplace.Models.Transaction", b =>
@@ -439,26 +397,7 @@ namespace DigitalGamesMarketplace.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DigitalGamesMarketplace.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Game");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DigitalGamesMarketplace.Models.User", b =>
-                {
-                    b.HasOne("DigitalGamesMarketplace.Models.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -515,11 +454,6 @@ namespace DigitalGamesMarketplace.Migrations
             modelBuilder.Entity("DigitalGamesMarketplace.Models.Developer", b =>
                 {
                     b.Navigation("Games");
-                });
-
-            modelBuilder.Entity("DigitalGamesMarketplace.Models.Role", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
