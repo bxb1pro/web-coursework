@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/brad/Documents/WebCoursework2/DigitalGamesMarketplace/DigitalGamesMarketplace.csproj": {}
+    "/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/DigitalGamesMarketplace.csproj": {}
   },
   "projects": {
-    "/Users/brad/Documents/WebCoursework2/DigitalGamesMarketplace/DigitalGamesMarketplace.csproj": {
+    "/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/DigitalGamesMarketplace.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/brad/Documents/WebCoursework2/DigitalGamesMarketplace/DigitalGamesMarketplace.csproj",
+        "projectUniqueName": "/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/DigitalGamesMarketplace.csproj",
         "projectName": "DigitalGamesMarketplace",
-        "projectPath": "/Users/brad/Documents/WebCoursework2/DigitalGamesMarketplace/DigitalGamesMarketplace.csproj",
+        "projectPath": "/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/DigitalGamesMarketplace.csproj",
         "packagesPath": "/Users/brad/.nuget/packages/",
-        "outputPath": "/Users/brad/Documents/WebCoursework2/DigitalGamesMarketplace/obj/",
+        "outputPath": "/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/brad/.nuget/NuGet/NuGet.Config"

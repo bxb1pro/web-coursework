@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalGamesMarketplace.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20240227001725_InitialCreate")]
+    [Migration("20240227002726_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
