@@ -11,11 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<MarketplaceContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Connection")));
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<MarketplaceContext>().AddDefaultTokenProviders();
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 
