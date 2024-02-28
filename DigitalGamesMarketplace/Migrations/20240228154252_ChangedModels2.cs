@@ -5,7 +5,7 @@
 namespace DigitalGamesMarketplace.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangedDatabase2 : Migration
+    public partial class ChangedModels2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
