@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigitalGamesMarketplace.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangedDatabase : Migration
+    public partial class ChangedModels : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +49,21 @@ namespace DigitalGamesMarketplace.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    CustomerId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    JoinDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.CustomerId);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,6 +195,7 @@ namespace DigitalGamesMarketplace.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Genre = table.Column<string>(type: "text", nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeveloperId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -200,11 +216,19 @@ namespace DigitalGamesMarketplace.Migrations
                     GameLicenseId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     GameId = table.Column<int>(type: "integer", nullable: false),
-                    LicenseKey = table.Column<string>(type: "text", nullable: false)
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    LicenseKey = table.Column<string>(type: "text", nullable: false),
+                    PurchaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GameLicenses", x => x.GameLicenseId);
+                    table.ForeignKey(
+                        name: "FK_GameLicenses_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GameLicenses_Games_GameId",
                         column: x => x.GameId,
@@ -240,11 +264,19 @@ namespace DigitalGamesMarketplace.Migrations
                     ReviewId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     GameId = table.Column<int>(type: "integer", nullable: false),
-                    Rating = table.Column<int>(type: "integer", nullable: false)
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    Rating = table.Column<int>(type: "integer", nullable: false),
+                    ReviewDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reviews", x => x.ReviewId);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reviews_Games_GameId",
                         column: x => x.GameId,
@@ -260,11 +292,19 @@ namespace DigitalGamesMarketplace.Migrations
                     TransactionId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     GameId = table.Column<int>(type: "integer", nullable: false),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false)
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    TransactionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.TransactionId);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Games_GameId",
                         column: x => x.GameId,
@@ -311,6 +351,11 @@ namespace DigitalGamesMarketplace.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_GameLicenses_CustomerId",
+                table: "GameLicenses",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GameLicenses_GameId",
                 table: "GameLicenses",
                 column: "GameId");
@@ -326,9 +371,19 @@ namespace DigitalGamesMarketplace.Migrations
                 column: "DeveloperId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reviews_CustomerId",
+                table: "Reviews",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_GameId",
                 table: "Reviews",
                 column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_CustomerId",
+                table: "Transactions",
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_GameId",
@@ -371,6 +426,9 @@ namespace DigitalGamesMarketplace.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Games");

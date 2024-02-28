@@ -9,6 +9,7 @@ namespace DigitalGamesMarketplace.Models
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Genre { get; set; }
+        public DateTime ReleaseDate { get; set; }
         public int DeveloperId { get; set; } // FK for Developer
 
         [JsonIgnore]
@@ -19,5 +20,7 @@ namespace DigitalGamesMarketplace.Models
         public List<Review>? Reviews { get; set; } // Navigation to Review
         [JsonIgnore]
         public List<GameLicense>? GameLicenses { get; set; } // Navigation to GameLicense
+        [JsonIgnore]
+        public List<Transaction>? Transactions { get; set; } // Navigation to Transactions
     }
 }

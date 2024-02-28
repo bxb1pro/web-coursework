@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigitalGamesMarketplace.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20240228011445_ChangedDatabase2")]
-    partial class ChangedDatabase2
+    [Migration("20240228153737_ChangedModels")]
+    partial class ChangedModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,30 @@ namespace DigitalGamesMarketplace.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("DigitalGamesMarketplace.Models.Customer", b =>
+                {
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CustomerId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("CustomerId");
+
+                    b.ToTable("Customers");
+                });
 
             modelBuilder.Entity("DigitalGamesMarketplace.Models.Developer", b =>
                 {
@@ -68,6 +92,9 @@ namespace DigitalGamesMarketplace.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("GameId");
 
                     b.HasIndex("DeveloperId");
@@ -83,6 +110,9 @@ namespace DigitalGamesMarketplace.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("GameLicenseId"));
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("GameId")
                         .HasColumnType("integer");
 
@@ -90,7 +120,12 @@ namespace DigitalGamesMarketplace.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("GameLicenseId");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("GameId");
 
@@ -127,13 +162,21 @@ namespace DigitalGamesMarketplace.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ReviewId"));
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("GameId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("ReviewDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("ReviewId");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("GameId");
 
@@ -151,10 +194,18 @@ namespace DigitalGamesMarketplace.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("GameId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("TransactionId");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("GameId");
 
@@ -370,11 +421,19 @@ namespace DigitalGamesMarketplace.Migrations
 
             modelBuilder.Entity("DigitalGamesMarketplace.Models.GameLicense", b =>
                 {
+                    b.HasOne("DigitalGamesMarketplace.Models.Customer", "Customer")
+                        .WithMany("GameLicenses")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DigitalGamesMarketplace.Models.Game", "Game")
                         .WithMany("GameLicenses")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Game");
                 });
@@ -392,22 +451,38 @@ namespace DigitalGamesMarketplace.Migrations
 
             modelBuilder.Entity("DigitalGamesMarketplace.Models.Review", b =>
                 {
+                    b.HasOne("DigitalGamesMarketplace.Models.Customer", "Customer")
+                        .WithMany("Reviews")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DigitalGamesMarketplace.Models.Game", "Game")
                         .WithMany("Reviews")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Customer");
+
                     b.Navigation("Game");
                 });
 
             modelBuilder.Entity("DigitalGamesMarketplace.Models.Transaction", b =>
                 {
+                    b.HasOne("DigitalGamesMarketplace.Models.Customer", "Customer")
+                        .WithMany("Transactions")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DigitalGamesMarketplace.Models.Game", "Game")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Game");
                 });
@@ -463,6 +538,15 @@ namespace DigitalGamesMarketplace.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DigitalGamesMarketplace.Models.Customer", b =>
+                {
+                    b.Navigation("GameLicenses");
+
+                    b.Navigation("Reviews");
+
+                    b.Navigation("Transactions");
+                });
+
             modelBuilder.Entity("DigitalGamesMarketplace.Models.Developer", b =>
                 {
                     b.Navigation("Games");
@@ -475,6 +559,8 @@ namespace DigitalGamesMarketplace.Migrations
                     b.Navigation("GameUpdates");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }
