@@ -1,14 +1,9 @@
-using Microsoft.AspNetCore.Http;
+using DigitalGamesMarketplace2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DigitalGamesMarketplace.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace DigitalGamesMarketplace.Controllers
+namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

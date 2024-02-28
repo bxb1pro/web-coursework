@@ -1,10 +1,11 @@
-using DigitalGamesMarketplace.Models;
+using DigitalGamesMarketplace2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity; 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using DigitalGamesMarketplace.Controllers;
+using DigitalGamesMarketplace2.Controllers;
+using DigitalGamesMarketplace2.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

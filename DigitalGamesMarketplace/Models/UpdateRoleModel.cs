@@ -1,5 +1,7 @@
- public class UpdateRoleModel
-    {
-        public string RoleId { get; set; }
-        public string NewRoleName { get; set; }
-    }
+namespace DigitalGamesMarketplace2.Models;
+
+public class UpdateRoleModel
+{
+    public string RoleId { get; set; }
+    public string NewRoleName { get; set; }
+}

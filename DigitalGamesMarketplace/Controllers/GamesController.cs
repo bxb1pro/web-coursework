@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DigitalGamesMarketplace.Models;
+using DigitalGamesMarketplace2.Models;
 
-namespace DigitalGamesMarketplace.Controllers
+namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
