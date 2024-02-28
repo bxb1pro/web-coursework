@@ -287,3 +287,8 @@
 /Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/obj/Debug/net8.0/DigitalGamesMarketplace.pdb
 /Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/obj/Debug/net8.0/DigitalGamesMarketplace.genruntimeconfig.cache
 /Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/obj/Debug/net8.0/ref/DigitalGamesMarketplace.dll
+/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/bin/Debug/net8.0/publish/web.config
+/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/bin/Debug/net8.0/publish/appsettings.Development.json
+/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/bin/Debug/net8.0/publish/appsettings.json
+/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/bin/Debug/net8.0/publish/DigitalGamesMarketplace.deps.json
+/Users/brad/Documents/web-coursework-8a77cc9754662593e5d8c67752519eac87c90603/DigitalGamesMarketplace/bin/Debug/net8.0/publish/DigitalGamesMarketplace.runtimeconfig.json
