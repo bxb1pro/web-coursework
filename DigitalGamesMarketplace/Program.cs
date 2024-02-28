@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<MarketplaceContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("Connection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Connection")));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<MarketplaceContext>().AddDefaultTokenProviders();

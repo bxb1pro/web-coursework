@@ -7,7 +7,6 @@ namespace DigitalGamesMarketplace.Models
     {
         public int TransactionId { get; set; }
         public int GameId { get; set; } // FK to Game
-        public DateTime TransactionDate { get; set; }
         public decimal Amount { get; set; }
 
         [JsonIgnore]
