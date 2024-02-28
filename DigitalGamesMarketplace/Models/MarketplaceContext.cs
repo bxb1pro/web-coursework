@@ -10,6 +10,7 @@ namespace DigitalGamesMarketplace.Models
         {
         }
 
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Developer> Developers { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
