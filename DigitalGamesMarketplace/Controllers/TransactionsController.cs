@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DigitalGamesMarketplace2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DigitalGamesMarketplace2.Controllers
 {
