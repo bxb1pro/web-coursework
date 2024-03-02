@@ -8,7 +8,6 @@ public class GameLicense
     public int GameId { get; set; } // FK to Game
     public int CustomerId { get; set; } // FK to Customer
     public string LicenseKey { get; set; }
-    public DateTimeOffset PurchaseDate { get; set; }
 
     [JsonIgnore]
     public Game? Game { get; set; } // Link to Game (FK)

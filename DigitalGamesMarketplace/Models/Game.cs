@@ -14,8 +14,6 @@ public class Game
     [JsonIgnore]
     public Developer? Developer { get; set; } // Link to Developer (FK)
     [JsonIgnore]
-    public List<GameUpdate>? GameUpdates { get; set; } // Navigation to GameUpdate
-    [JsonIgnore]
     public List<Review>? Reviews { get; set; } // Navigation to Review
     [JsonIgnore]
     public List<GameLicense>? GameLicenses { get; set; } // Navigation to GameLicense

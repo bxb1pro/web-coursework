@@ -3,6 +3,7 @@ using System;
 using DigitalGamesMarketplace2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigitalGamesMarketplace2.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    partial class MarketplaceContextModelSnapshot : ModelSnapshot
+    [Migration("20240302182439_FullModelsFinal")]
+    partial class FullModelsFinal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,6 +130,28 @@ namespace DigitalGamesMarketplace2.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("GameLicenses");
+                });
+
+            modelBuilder.Entity("DigitalGamesMarketplace2.Models.GameUpdate", b =>
+                {
+                    b.Property<int>("GameUpdateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("GameUpdateId"));
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("GameUpdateId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("GameUpdates");
                 });
 
             modelBuilder.Entity("DigitalGamesMarketplace2.Models.Review", b =>
@@ -413,6 +438,17 @@ namespace DigitalGamesMarketplace2.Migrations
                     b.Navigation("Game");
                 });
 
+            modelBuilder.Entity("DigitalGamesMarketplace2.Models.GameUpdate", b =>
+                {
+                    b.HasOne("DigitalGamesMarketplace2.Models.Game", "Game")
+                        .WithMany("GameUpdates")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+                });
+
             modelBuilder.Entity("DigitalGamesMarketplace2.Models.Review", b =>
                 {
                     b.HasOne("DigitalGamesMarketplace2.Models.Customer", "Customer")
@@ -519,6 +555,8 @@ namespace DigitalGamesMarketplace2.Migrations
             modelBuilder.Entity("DigitalGamesMarketplace2.Models.Game", b =>
                 {
                     b.Navigation("GameLicenses");
+
+                    b.Navigation("GameUpdates");
 
                     b.Navigation("Reviews");
 

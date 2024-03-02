@@ -16,5 +16,4 @@ public class MarketplaceContext : IdentityDbContext<IdentityUser>
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<GameLicense> GameLicenses { get; set; }
-    public DbSet<GameUpdate> GameUpdates { get; set; }
 }
