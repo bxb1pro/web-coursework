@@ -3,6 +3,7 @@ using System;
 using DigitalGamesMarketplace2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigitalGamesMarketplace2.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    partial class MarketplaceContextModelSnapshot : ModelSnapshot
+    [Migration("20240302172309_UpdateModel2")]
+    partial class UpdateModel2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace DigitalGamesMarketplace2.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("JoinDate")
+                    b.Property<DateTime>("JoinDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
@@ -117,7 +120,7 @@ namespace DigitalGamesMarketplace2.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("PurchaseDate")
+                    b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("GameLicenseId");
@@ -168,7 +171,7 @@ namespace DigitalGamesMarketplace2.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset>("ReviewDate")
+                    b.Property<DateTime>("ReviewDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ReviewId");
@@ -197,7 +200,7 @@ namespace DigitalGamesMarketplace2.Migrations
                     b.Property<int>("GameId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset>("TransactionDate")
+                    b.Property<DateTime>("TransactionDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("TransactionId");

@@ -8,7 +8,7 @@ public class Review
     public int GameId { get; set; } // FK to Game
     public int CustomerId { get; set; } // FK to Customer
     public int Rating { get; set; }
-    public DateTime ReviewDate { get; set; }
+    public DateTimeOffset ReviewDate { get; set; }
         
 
     [JsonIgnore]

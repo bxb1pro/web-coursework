@@ -7,7 +7,7 @@ public class Customer
     public int CustomerId { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
-    public DateTime JoinDate { get; set; }
+    public DateTimeOffset JoinDate { get; set; }
         
     [JsonIgnore]
     public List<Transaction>? Transactions { get; set; } // Navigation to Transactions
