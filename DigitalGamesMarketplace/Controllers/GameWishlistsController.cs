@@ -46,7 +46,7 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGameWishlist(int id, GameWishlist gameWishlist)
         {
-            if (id != gameWishlist.WishlistId)
+            if (id != gameWishlist.GameWishlistId)
             {
                 return BadRequest();
             }
@@ -78,23 +78,9 @@ namespace DigitalGamesMarketplace2.Controllers
         public async Task<ActionResult<GameWishlist>> PostGameWishlist(GameWishlist gameWishlist)
         {
             _context.GameWishlists.Add(gameWishlist);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (GameWishlistExists(gameWishlist.WishlistId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGameWishlist", new { id = gameWishlist.WishlistId }, gameWishlist);
+            return CreatedAtAction("GetGameWishlist", new { id = gameWishlist.GameWishlistId }, gameWishlist);
         }
 
         // DELETE: api/GameWishlists/5
@@ -115,7 +101,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
         private bool GameWishlistExists(int id)
         {
-            return _context.GameWishlists.Any(e => e.WishlistId == id);
+            return _context.GameWishlists.Any(e => e.GameWishlistId == id);
         }
     }
 }

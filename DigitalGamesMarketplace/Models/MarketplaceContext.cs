@@ -21,9 +21,11 @@ public class MarketplaceContext : IdentityDbContext<IdentityUser>
     {
         base.OnModelCreating(modelBuilder);
 
+        // Define GameWishlistId as the sole primary key
         modelBuilder.Entity<GameWishlist>()
-            .HasKey(wg => new { wg.WishlistId, wg.GameId }); // Composite key
+            .HasKey(wg => wg.GameWishlistId);
 
+        // Continue to define the relationships
         modelBuilder.Entity<GameWishlist>()
             .HasOne(wg => wg.Wishlist)
             .WithMany(w => w.GameWishlists)
