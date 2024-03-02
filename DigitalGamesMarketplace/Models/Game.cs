@@ -12,11 +12,9 @@ public class Game
     public int DeveloperId { get; set; } // FK for Developer
 
     [JsonIgnore]
-    public Developer? Developer { get; set; } // Link to Developer (FK)
+    public Developer? Developer { get; set; } // Navigation to Developer (FK)
     [JsonIgnore]
-    public List<Review>? Reviews { get; set; } // Navigation to Review
+    public ICollection<Transaction>? Transactions { get; set; } // Navigation to Transaction
     [JsonIgnore]
-    public List<GameLicense>? GameLicenses { get; set; } // Navigation to GameLicense
-    [JsonIgnore]
-    public List<Transaction>? Transactions { get; set; } // Navigation to Transactions
+    public ICollection<GameWishlist>? GameWishlists { get; set; } = new List<GameWishlist>(); // For the many-to-many relationship
 }

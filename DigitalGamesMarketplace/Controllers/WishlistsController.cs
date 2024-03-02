@@ -6,53 +6,52 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DigitalGamesMarketplace2.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReviewsController : ControllerBase
+    public class WishlistsController : ControllerBase
     {
         private readonly MarketplaceContext _context;
 
-        public ReviewsController(MarketplaceContext context)
+        public WishlistsController(MarketplaceContext context)
         {
             _context = context;
         }
 
-        // GET: api/Reviews
+        // GET: api/Wishlists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
+        public async Task<ActionResult<IEnumerable<Wishlist>>> GetWishlists()
         {
-            return await _context.Reviews.ToListAsync();
+            return await _context.Wishlists.ToListAsync();
         }
 
-        // GET: api/Reviews/5
+        // GET: api/Wishlists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Review>> GetReview(int id)
+        public async Task<ActionResult<Wishlist>> GetWishlist(int id)
         {
-            var review = await _context.Reviews.FindAsync(id);
+            var wishlist = await _context.Wishlists.FindAsync(id);
 
-            if (review == null)
+            if (wishlist == null)
             {
                 return NotFound();
             }
 
-            return review;
+            return wishlist;
         }
 
-        // PUT: api/Reviews/5
+        // PUT: api/Wishlists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(int id, Review review)
+        public async Task<IActionResult> PutWishlist(int id, Wishlist wishlist)
         {
-            if (id != review.ReviewId)
+            if (id != wishlist.WishlistId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(review).State = EntityState.Modified;
+            _context.Entry(wishlist).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +59,7 @@ namespace DigitalGamesMarketplace2.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ReviewExists(id))
+                if (!WishlistExists(id))
                 {
                     return NotFound();
                 }
@@ -73,36 +72,36 @@ namespace DigitalGamesMarketplace2.Controllers
             return NoContent();
         }
 
-        // POST: api/Reviews
+        // POST: api/Wishlists
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Review>> PostReview(Review review)
+        public async Task<ActionResult<Wishlist>> PostWishlist(Wishlist wishlist)
         {
-            _context.Reviews.Add(review);
+            _context.Wishlists.Add(wishlist);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetReview", new { id = review.ReviewId }, review);
+            return CreatedAtAction("GetWishlist", new { id = wishlist.WishlistId }, wishlist);
         }
 
-        // DELETE: api/Reviews/5
+        // DELETE: api/Wishlists/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReview(int id)
+        public async Task<IActionResult> DeleteWishlist(int id)
         {
-            var review = await _context.Reviews.FindAsync(id);
-            if (review == null)
+            var wishlist = await _context.Wishlists.FindAsync(id);
+            if (wishlist == null)
             {
                 return NotFound();
             }
 
-            _context.Reviews.Remove(review);
+            _context.Wishlists.Remove(wishlist);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ReviewExists(int id)
+        private bool WishlistExists(int id)
         {
-            return _context.Reviews.Any(e => e.ReviewId == id);
+            return _context.Wishlists.Any(e => e.WishlistId == id);
         }
     }
 }

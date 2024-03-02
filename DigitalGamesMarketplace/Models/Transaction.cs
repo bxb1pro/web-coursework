@@ -11,7 +11,7 @@ public class Transaction
     public DateTimeOffset TransactionDate { get; set; }
 
     [JsonIgnore]
-    public Game? Game { get; set; } // Link to Game (FK)
+    public Game? Game { get; set; } // Navigation to Game (FK)
     [JsonIgnore]
-    public Customer? Customer { get; set; } // Link to Customer (FK)
+    public Customer? Customer { get; set; } // Navigation to Customer (FK)
 }
