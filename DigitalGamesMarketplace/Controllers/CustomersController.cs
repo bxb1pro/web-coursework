@@ -47,6 +47,12 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
+            // Extra model state validation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != customer.CustomerId)
             {
                 return BadRequest();
@@ -78,6 +84,12 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
+            // Extra model state validation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); 
+            }
+
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
 

@@ -16,13 +16,20 @@ namespace DigitalGamesMarketplace2.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly EmailService _emailService;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AccountController> _logger; // Add ILogger field
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, EmailService emailService, IConfiguration configuration)
+        public AccountController(
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
+            EmailService emailService,
+            IConfiguration configuration,
+            ILogger<AccountController> logger) // Add logger
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
             _configuration = configuration;
+            _logger = logger; // Initialise the logger
         }
 
         [HttpPost("register")]
@@ -33,21 +40,21 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (result.Succeeded)
             {
-                // Generate an email verification token
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                // Create the verification link
                 var verificationLink = Url.Action("VerifyEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
-
-                // Send the verification email
                 var emailSubject = "Email Verification";
                 var emailBody = $"Please verify your email by clicking the following link: {verificationLink}";
                 _emailService.SendEmail(user.Email, emailSubject, emailBody);
-               
+
+                _logger.LogInformation($"User {model.Email} registered successfully.");
+
                 return Ok("User registered successfully. An email verification link has been sent.");
             }
-
-            return BadRequest(result.Errors);
+            else
+            {
+                _logger.LogWarning($"Registration failed for user {model.Email}. Errors: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                return BadRequest(result.Errors);
+            }
         }
 
 
@@ -56,25 +63,28 @@ namespace DigitalGamesMarketplace2.Controllers
         public async Task<IActionResult> VerifyEmail(string userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId);
-
             if (user == null)
             {
+                _logger.LogWarning($"Email verification failed. User ID {userId} not found.");
                 return NotFound("User not found.");
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
-
             if (result.Succeeded)
             {
+                _logger.LogInformation($"User {user.Email} email verification successful.");
                 return Ok("Email verification successful.");
             }
-
-            return BadRequest("Email verification failed.");
+            else
+            {
+                _logger.LogWarning($"Email verification failed for user {user.Email}. Errors: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                return BadRequest("Email verification failed.");
+            }
         }
 
 
 
-        [HttpPost("login")]
+        [HttpPost("login")] // Additional logging for login success/failure
         public async Task<IActionResult> Login(AuthModel model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
@@ -83,17 +93,35 @@ namespace DigitalGamesMarketplace2.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 var roles = await _userManager.GetRolesAsync(user);
-                var token = GenerateJwtToken(user,roles);
+                var token = GenerateJwtToken(user, roles);
+
+                _logger.LogInformation($"User {model.Email} logged in successfully.");
+
                 return Ok(new { Token = token });
             }
-
-            return Unauthorized("Invalid login attempt.");
+            else if (result.IsLockedOut)
+            {
+                _logger.LogWarning($"User {model.Email} account locked.");
+                return Unauthorized("Account is locked.");
+            }
+            else if (result.IsNotAllowed)
+            {
+                _logger.LogWarning($"User {model.Email} login not allowed.");
+                return Unauthorized("Login not allowed.");
+            }
+            else
+            {
+                _logger.LogWarning($"Failed login attempt for user {model.Email}.");
+                return Unauthorized("Invalid login attempt.");
+            }
         }
 
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
+            var userName = User.Identity?.Name; // Get the current user's name from User Identity
             await _signInManager.SignOutAsync();
+            _logger.LogInformation($"User {userName} logged out successfully.");
             return Ok("Logged out");
         }
         private string GenerateJwtToken(IdentityUser user, IList<string> roles)

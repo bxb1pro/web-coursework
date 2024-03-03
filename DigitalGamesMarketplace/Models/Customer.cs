@@ -7,12 +7,10 @@ public class Customer
     public int CustomerId { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
-    public DateTime JoinDate { get; set; }
+    public DateTimeOffset JoinDate { get; set; }
         
     [JsonIgnore]
-    public List<Transaction>? Transactions { get; set; } // Navigation to Transactions
+    public ICollection<Transaction>? Transactions { get; set; } // Navigation to Transaction
     [JsonIgnore]
-    public List<Review>? Reviews { get; set; } // Navigation to Review
-    [JsonIgnore]
-    public List<GameLicense>? GameLicenses { get; set; } // Navigation to GameLicense
+    public ICollection<Wishlist>? Wishlists { get; set; } // Navigation to Wishlist
 }

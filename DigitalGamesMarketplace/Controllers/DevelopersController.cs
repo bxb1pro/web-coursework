@@ -47,6 +47,12 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDeveloper(int id, Developer developer)
         {
+            // Extra model state validation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != developer.DeveloperId)
             {
                 return BadRequest();
@@ -78,6 +84,12 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPost]
         public async Task<ActionResult<Developer>> PostDeveloper(Developer developer)
         {
+            // Extra model state validation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             _context.Developers.Add(developer);
             await _context.SaveChangesAsync();
 

@@ -3,6 +3,7 @@ using System;
 using DigitalGamesMarketplace2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigitalGamesMarketplace2.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    partial class MarketplaceContextModelSnapshot : ModelSnapshot
+    [Migration("20240302210857_FullModelsFinal4")]
+    partial class FullModelsFinal4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,23 +104,18 @@ namespace DigitalGamesMarketplace2.Migrations
 
             modelBuilder.Entity("DigitalGamesMarketplace2.Models.GameWishlist", b =>
                 {
-                    b.Property<int>("GameWishlistId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("WishlistId")
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("GameWishlistId"));
 
                     b.Property<int>("GameId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("WishlistId")
+                    b.Property<int>("GameWishlistId")
                         .HasColumnType("integer");
 
-                    b.HasKey("GameWishlistId");
+                    b.HasKey("WishlistId", "GameId");
 
                     b.HasIndex("GameId");
-
-                    b.HasIndex("WishlistId");
 
                     b.ToTable("GameWishlists");
                 });

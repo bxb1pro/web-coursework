@@ -6,46 +6,45 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DigitalGamesMarketplace2.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GamesController : ControllerBase
+    public class WishlistsController : ControllerBase
     {
         private readonly MarketplaceContext _context;
 
-        public GamesController(MarketplaceContext context)
+        public WishlistsController(MarketplaceContext context)
         {
             _context = context;
         }
 
-        // GET: api/Games
+        // GET: api/Wishlists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Game>>> GetGames()
+        public async Task<ActionResult<IEnumerable<Wishlist>>> GetWishlists()
         {
-            return await _context.Games.ToListAsync();
+            return await _context.Wishlists.ToListAsync();
         }
 
-        // GET: api/Games/5
+        // GET: api/Wishlists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Game>> GetGame(int id)
+        public async Task<ActionResult<Wishlist>> GetWishlist(int id)
         {
-            var game = await _context.Games.FindAsync(id);
+            var wishlist = await _context.Wishlists.FindAsync(id);
 
-            if (game == null)
+            if (wishlist == null)
             {
                 return NotFound();
             }
 
-            return game;
+            return wishlist;
         }
 
-        // PUT: api/Games/5
+        // PUT: api/Wishlists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGame(int id, Game game)
+        public async Task<IActionResult> PutWishlist(int id, Wishlist wishlist)
         {
             // Extra model state validation
             if (!ModelState.IsValid)
@@ -53,12 +52,12 @@ namespace DigitalGamesMarketplace2.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != game.GameId)
+            if (id != wishlist.WishlistId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(game).State = EntityState.Modified;
+            _context.Entry(wishlist).State = EntityState.Modified;
 
             try
             {
@@ -66,7 +65,7 @@ namespace DigitalGamesMarketplace2.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GameExists(id))
+                if (!WishlistExists(id))
                 {
                     return NotFound();
                 }
@@ -79,10 +78,10 @@ namespace DigitalGamesMarketplace2.Controllers
             return NoContent();
         }
 
-        // POST: api/Games
+        // POST: api/Wishlists
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Game>> PostGame(Game game)
+        public async Task<ActionResult<Wishlist>> PostWishlist(Wishlist wishlist)
         {
             // Extra model state validation
             if (!ModelState.IsValid)
@@ -90,31 +89,31 @@ namespace DigitalGamesMarketplace2.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Games.Add(game);
+            _context.Wishlists.Add(wishlist);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGame", new { id = game.GameId }, game);
+            return CreatedAtAction("GetWishlist", new { id = wishlist.WishlistId }, wishlist);
         }
 
-        // DELETE: api/Games/5
+        // DELETE: api/Wishlists/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGame(int id)
+        public async Task<IActionResult> DeleteWishlist(int id)
         {
-            var game = await _context.Games.FindAsync(id);
-            if (game == null)
+            var wishlist = await _context.Wishlists.FindAsync(id);
+            if (wishlist == null)
             {
                 return NotFound();
             }
 
-            _context.Games.Remove(game);
+            _context.Wishlists.Remove(wishlist);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool GameExists(int id)
+        private bool WishlistExists(int id)
         {
-            return _context.Games.Any(e => e.GameId == id);
+            return _context.Wishlists.Any(e => e.WishlistId == id);
         }
     }
 }

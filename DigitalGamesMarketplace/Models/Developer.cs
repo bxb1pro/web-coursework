@@ -9,5 +9,5 @@ public class Developer
     public string ContactEmail { get; set; }
 
     [JsonIgnore]
-    public List<Game>? Games { get; set; } // Link to Game (one to many)
+    public ICollection<Game>? Games { get; set; } // Navigation to Game
 }
