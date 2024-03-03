@@ -15,17 +15,21 @@ namespace DigitalGamesMarketplace2.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly MarketplaceContext _context;
+        private readonly ILogger<CustomersController> _logger; // Add ILogger field
 
-        public CustomersController(MarketplaceContext context)
+        public CustomersController(MarketplaceContext context, ILogger<CustomersController> logger) // Add logger
         {
             _context = context;
+            _logger = logger; // Initialise logger
         }
 
         // GET: api/Customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            var customers = await _context.Customers.ToListAsync();
+            _logger.LogInformation($"Retrieved {customers.Count} customers.");
+            return customers;
         }
 
         // GET: api/Customers/5
@@ -36,9 +40,11 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (customer == null)
             {
+                _logger.LogWarning($"Customer with ID {id} not found.");
                 return NotFound();
             }
 
+            _logger.LogInformation($"Retrieved customer with ID {id}.");
             return customer;
         }
 
@@ -47,9 +53,9 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
-            // Extra model state validation
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning($"Update failed due to invalid model state for customer ID {id}.");
                 return BadRequest(ModelState);
             }
 
@@ -63,15 +69,18 @@ namespace DigitalGamesMarketplace2.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                _logger.LogInformation($"Updated customer with ID {id}.");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!CustomerExists(id))
                 {
+                    _logger.LogWarning($"Attempt to update non-existing customer with ID {id}.");
                     return NotFound();
                 }
                 else
                 {
+                    _logger.LogError(ex, $"An error occurred while updating customer with ID {id}.");
                     throw;
                 }
             }
@@ -84,14 +93,15 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            // Extra model state validation
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); 
+                _logger.LogWarning("Creation failed due to invalid model state.");
+                return BadRequest(ModelState);
             }
 
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"Created a new customer with ID {customer.CustomerId}.");
 
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
@@ -103,11 +113,13 @@ namespace DigitalGamesMarketplace2.Controllers
             var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
             {
+                _logger.LogWarning($"Attempt to delete non-existing customer with ID {id}.");
                 return NotFound();
             }
 
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"Deleted customer with ID {id}.");
 
             return NoContent();
         }

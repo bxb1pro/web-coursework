@@ -14,17 +14,21 @@ namespace DigitalGamesMarketplace2.Controllers
     public class GameWishlistsController : ControllerBase
     {
         private readonly MarketplaceContext _context;
+        private readonly ILogger<GameWishlistsController> _logger; // Add ILogger field
 
-        public GameWishlistsController(MarketplaceContext context)
+        public GameWishlistsController(MarketplaceContext context, ILogger<GameWishlistsController> logger) // Add logger
         {
             _context = context;
+            _logger = logger; // Initialise logger
         }
 
         // GET: api/GameWishlists
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GameWishlist>>> GetGameWishlists()
         {
-            return await _context.GameWishlists.ToListAsync();
+            var gameWishlists = await _context.GameWishlists.ToListAsync();
+            _logger.LogInformation($"Retrieved all game wishlists successfully with count: {gameWishlists.Count}");
+            return gameWishlists;
         }
 
         // GET: api/GameWishlists/5
@@ -35,9 +39,11 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (gameWishlist == null)
             {
+                _logger.LogWarning($"Game wishlist with ID {id} not found.");
                 return NotFound();
             }
 
+            _logger.LogInformation($"Retrieved game wishlist with ID {id} successfully.");
             return gameWishlist;
         }
 
@@ -46,9 +52,9 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGameWishlist(int id, GameWishlist gameWishlist)
         {
-            // Extra model state validation
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Update failed due to invalid model state for game wishlist ID {id}.");
                 return BadRequest(ModelState);
             }
 
@@ -62,15 +68,18 @@ namespace DigitalGamesMarketplace2.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                _logger.LogInformation($"Game wishlist ID {id} updated successfully.");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!GameWishlistExists(id))
                 {
+                    _logger.LogWarning($"Game wishlist ID {id} not found for update.");
                     return NotFound();
                 }
                 else
                 {
+                    _logger.LogError(ex, $"An error occurred while updating game wishlist ID {id}.");
                     throw;
                 }
             }
@@ -83,14 +92,15 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPost]
         public async Task<ActionResult<GameWishlist>> PostGameWishlist(GameWishlist gameWishlist)
         {
-            // Extra model state validation
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Creation of a new game wishlist failed due to invalid model state.");
                 return BadRequest(ModelState);
             }
 
             _context.GameWishlists.Add(gameWishlist);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"A new game wishlist with ID {gameWishlist.GameWishlistId} created successfully.");
 
             return CreatedAtAction("GetGameWishlist", new { id = gameWishlist.GameWishlistId }, gameWishlist);
         }
@@ -102,11 +112,13 @@ namespace DigitalGamesMarketplace2.Controllers
             var gameWishlist = await _context.GameWishlists.FindAsync(id);
             if (gameWishlist == null)
             {
+                _logger.LogWarning($"Attempt to delete non-existing game wishlist with ID {id}.");
                 return NotFound();
             }
 
             _context.GameWishlists.Remove(gameWishlist);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"Game wishlist with ID {id} deleted successfully.");
 
             return NoContent();
         }

@@ -15,17 +15,21 @@ namespace DigitalGamesMarketplace2.Controllers
     public class DevelopersController : ControllerBase
     {
         private readonly MarketplaceContext _context;
+        private readonly ILogger<DevelopersController> _logger; // Add ILogger field
 
-        public DevelopersController(MarketplaceContext context)
+        public DevelopersController(MarketplaceContext context, ILogger<DevelopersController> logger) // Add logger
         {
             _context = context;
+            _logger = logger; // Initialise logger
         }
 
         // GET: api/Developers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Developer>>> GetDevelopers()
         {
-            return await _context.Developers.ToListAsync();
+            var developers = await _context.Developers.ToListAsync();
+            _logger.LogInformation("Retrieved all developers successfully.");
+            return developers;
         }
 
         // GET: api/Developers/5
@@ -36,9 +40,11 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (developer == null)
             {
+                _logger.LogWarning($"Developer with ID {id} not found.");
                 return NotFound();
             }
 
+            _logger.LogInformation($"Retrieved developer with ID {id} successfully.");
             return developer;
         }
 
@@ -47,9 +53,9 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDeveloper(int id, Developer developer)
         {
-            // Extra model state validation
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Update failed due to invalid model state for developer ID {id}.");
                 return BadRequest(ModelState);
             }
 
@@ -63,15 +69,18 @@ namespace DigitalGamesMarketplace2.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                _logger.LogInformation($"Developer ID {id} updated successfully.");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!DeveloperExists(id))
                 {
+                    _logger.LogWarning($"Developer ID {id} not found for update.");
                     return NotFound();
                 }
                 else
                 {
+                    _logger.LogError(ex, $"An error occurred while updating developer ID {id}.");
                     throw;
                 }
             }
@@ -84,14 +93,15 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPost]
         public async Task<ActionResult<Developer>> PostDeveloper(Developer developer)
         {
-            // Extra model state validation
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Creation of a new developer failed due to invalid model state.");
                 return BadRequest(ModelState);
             }
 
             _context.Developers.Add(developer);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"A new developer with ID {developer.DeveloperId} created successfully.");
 
             return CreatedAtAction("GetDeveloper", new { id = developer.DeveloperId }, developer);
         }
@@ -103,11 +113,13 @@ namespace DigitalGamesMarketplace2.Controllers
             var developer = await _context.Developers.FindAsync(id);
             if (developer == null)
             {
+                _logger.LogWarning($"Attempt to delete developer with ID {id} failed as it does not exist.");
                 return NotFound();
             }
 
             _context.Developers.Remove(developer);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"Developer with ID {id} deleted successfully.");
 
             return NoContent();
         }

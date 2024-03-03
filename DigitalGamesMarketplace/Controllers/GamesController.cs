@@ -15,17 +15,21 @@ namespace DigitalGamesMarketplace2.Controllers
     public class GamesController : ControllerBase
     {
         private readonly MarketplaceContext _context;
+        private readonly ILogger<GamesController> _logger; // Add ILogger field
 
-        public GamesController(MarketplaceContext context)
+        public GamesController(MarketplaceContext context, ILogger<GamesController> logger) // Add logger
         {
             _context = context;
+            _logger = logger; // Initialise logger
         }
 
         // GET: api/Games
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Game>>> GetGames()
         {
-            return await _context.Games.ToListAsync();
+            var games = await _context.Games.ToListAsync();
+            _logger.LogInformation($"Retrieved {games.Count} games at {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}");
+            return games;
         }
 
         // GET: api/Games/5
@@ -36,9 +40,11 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (game == null)
             {
+                _logger.LogWarning($"Game with ID {id} not found at {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}");
                 return NotFound();
             }
 
+            _logger.LogInformation($"Retrieved game with ID {id} successfully at {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}");
             return game;
         }
 
@@ -47,9 +53,9 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGame(int id, Game game)
         {
-            // Extra model state validation
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning($"Update failed due to invalid model state for game ID {id}.");
                 return BadRequest(ModelState);
             }
 
@@ -63,15 +69,18 @@ namespace DigitalGamesMarketplace2.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                _logger.LogInformation($"Game ID {id} updated successfully.");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!GameExists(id))
                 {
+                    _logger.LogWarning($"Attempt to update non-existing game with ID {id}.");
                     return NotFound();
                 }
                 else
                 {
+                    _logger.LogError(ex, $"An error occurred while updating game with ID {id}.");
                     throw;
                 }
             }
@@ -84,14 +93,15 @@ namespace DigitalGamesMarketplace2.Controllers
         [HttpPost]
         public async Task<ActionResult<Game>> PostGame(Game game)
         {
-            // Extra model state validation
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Attempt to create a new game failed due to invalid model state.");
                 return BadRequest(ModelState);
             }
 
             _context.Games.Add(game);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"A new game with ID {game.GameId} created successfully.");
 
             return CreatedAtAction("GetGame", new { id = game.GameId }, game);
         }
@@ -103,11 +113,13 @@ namespace DigitalGamesMarketplace2.Controllers
             var game = await _context.Games.FindAsync(id);
             if (game == null)
             {
+                _logger.LogWarning($"Attempt to delete non-existing game with ID {id}.");
                 return NotFound();
             }
 
             _context.Games.Remove(game);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"Game with ID {id} deleted successfully.");
 
             return NoContent();
         }

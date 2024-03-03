@@ -12,17 +12,20 @@ namespace DigitalGamesMarketplace2.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger<RolesController> _logger; // Add ILogger field
 
-        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, ILogger<RolesController> logger) // Add logger
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _logger = logger; // Initialise the logger
         }
 
         [HttpGet]
         public IActionResult GetRoles()
         {
             var roles = _roleManager.Roles.ToList();
+            _logger.LogInformation("Retrieved all roles successfully.");
             return Ok(roles);
         }
 
@@ -33,9 +36,11 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (role == null)
             {
+                _logger.LogWarning($"Attempt to retrieve a role failed. Role ID {roleId} not found.");
                 return NotFound("Role not found.");
             }
 
+            _logger.LogInformation($"Role retrieved successfully. Role ID: {roleId}, Role Name: {role.Name}");
             return Ok(role);
         }
 
@@ -47,10 +52,14 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (result.Succeeded)
             {
+                _logger.LogInformation($"Role {roleName} created successfully.");
                 return Ok("Role created successfully.");
             }
-
-            return BadRequest(result.Errors);
+            else
+            {
+                _logger.LogWarning($"Failed to create role {roleName}. Errors: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                return BadRequest(result.Errors);
+            }
         }
 
         [HttpPut]
@@ -60,6 +69,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (role == null)
             {
+                _logger.LogWarning($"Role ID {model.RoleId} not found for update.");
                 return NotFound("Role not found.");
             }
 
@@ -68,10 +78,14 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (result.Succeeded)
             {
+                _logger.LogInformation($"Role ID {model.RoleId} updated successfully to {model.NewRoleName}.");
                 return Ok("Role updated successfully.");
             }
-
-            return BadRequest(result.Errors);
+            else
+            {
+                _logger.LogWarning($"Failed to update role ID {model.RoleId}. Errors: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                return BadRequest(result.Errors);
+            }
         }
 
         [HttpDelete]
@@ -81,6 +95,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (role == null)
             {
+                _logger.LogWarning($"Delete operation failed. Role ID {roleId} not found.");
                 return NotFound("Role not found.");
             }
 
@@ -88,10 +103,14 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (result.Succeeded)
             {
+                _logger.LogInformation($"Role ID {roleId} deleted successfully.");
                 return Ok("Role deleted successfully.");
             }
-
-            return BadRequest(result.Errors);
+            else
+            {
+                _logger.LogWarning($"Failed to delete role ID {roleId}. Errors: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                return BadRequest(result.Errors);
+            }
         }
 
         [HttpPost("assign-role-to-user")]
@@ -101,6 +120,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (user == null)
             {
+                _logger.LogWarning($"Assign role operation failed. User ID {model.UserId} not found.");
                 return NotFound("User not found.");
             }
 
@@ -108,6 +128,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (!roleExists)
             {
+                _logger.LogWarning($"Assign role operation failed. Role {model.RoleName} not found.");
                 return NotFound("Role not found.");
             }
 
@@ -115,10 +136,15 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (result.Succeeded)
             {
+                _logger.LogInformation($"Role {model.RoleName} assigned to user ID {model.UserId} successfully.");
                 return Ok("Role assigned to user successfully.");
             }
+            else
+            {
+                _logger.LogWarning($"Failed to assign role {model.RoleName} to user ID {model.UserId}. Errors: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                return BadRequest(result.Errors);
+            }
 
-            return BadRequest(result.Errors);
         }
 
     }

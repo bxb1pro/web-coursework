@@ -57,7 +57,6 @@ namespace DigitalGamesMarketplace2.Controllers
             }
         }
 
-
         // Add an action to handle email verification
         [HttpGet("verify-email")]
         public async Task<IActionResult> VerifyEmail(string userId, string token)
@@ -67,6 +66,13 @@ namespace DigitalGamesMarketplace2.Controllers
             {
                 _logger.LogWarning($"Email verification failed. User ID {userId} not found.");
                 return NotFound("User not found.");
+            }
+
+            // Additional check to see if user email is already verified
+            if (user.EmailConfirmed)
+            {
+                _logger.LogInformation($"User {user.Email} email is already verified.");
+                return Ok("Email is already verified.");
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
@@ -81,8 +87,6 @@ namespace DigitalGamesMarketplace2.Controllers
                 return BadRequest("Email verification failed.");
             }
         }
-
-
 
         [HttpPost("login")] // Additional logging for login success/failure
         public async Task<IActionResult> Login(AuthModel model)
