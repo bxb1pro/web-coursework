@@ -42,7 +42,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (transaction == null)
             {
                 _logger.LogWarning($"Transaction with ID {id} not found.");
-                return NotFound();
+                return NotFound("Transaction not found.");
             }
 
             _logger.LogInformation($"Retrieved transaction with ID {id} successfully.");
@@ -62,7 +62,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (id != transaction.TransactionId)
             {
-                return BadRequest();
+                return BadRequest("ID does not match.");
             }
 
             _context.Entry(transaction).State = EntityState.Modified;
@@ -77,7 +77,7 @@ namespace DigitalGamesMarketplace2.Controllers
                 if (!TransactionExists(id))
                 {
                     _logger.LogWarning($"Transaction ID {id} not found for update.");
-                    return NotFound();
+                    return NotFound("Transaction not found.");
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (transaction == null)
             {
                 _logger.LogWarning($"Attempt to delete non-existing transaction with ID {id}.");
-                return NotFound();
+                return NotFound("Transaction not found.");
             }
 
             _context.Transactions.Remove(transaction);

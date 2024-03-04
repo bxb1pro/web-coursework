@@ -42,7 +42,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (customer == null)
             {
                 _logger.LogWarning($"Customer with ID {id} not found.");
-                return NotFound();
+                return NotFound("Customer not found.");
             }
 
             _logger.LogInformation($"Retrieved customer with ID {id}.");
@@ -62,7 +62,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (id != customer.CustomerId)
             {
-                return BadRequest();
+                return BadRequest("ID does not match.");
             }
 
             _context.Entry(customer).State = EntityState.Modified;
@@ -77,7 +77,7 @@ namespace DigitalGamesMarketplace2.Controllers
                 if (!CustomerExists(id))
                 {
                     _logger.LogWarning($"Attempt to update non-existing customer with ID {id}.");
-                    return NotFound();
+                    return NotFound("Customer not found.");
                 }
                 else
                 {
@@ -115,7 +115,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (customer == null)
             {
                 _logger.LogWarning($"Attempt to delete non-existing customer with ID {id}.");
-                return NotFound();
+                return NotFound("Customer not found.");
             }
 
             _context.Customers.Remove(customer);

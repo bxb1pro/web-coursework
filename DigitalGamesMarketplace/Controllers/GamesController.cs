@@ -27,6 +27,7 @@ namespace DigitalGamesMarketplace2.Controllers
         // GET: api/Games
         [HttpGet]
         [Authorize(Roles = "SuperAdmin,Admin,User")]
+        [AllowAnonymous] // For demonstration of PostgreSQl database on cloud being successfully connected to web app deployed on Azure
         public async Task<ActionResult<IEnumerable<Game>>> GetGames()
         {
             var games = await _context.Games.ToListAsync();
@@ -43,7 +44,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (game == null)
             {
                 _logger.LogWarning($"Game with ID {id} not found at {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}");
-                return NotFound();
+                return NotFound("Game not found.");
             }
 
             _logger.LogInformation($"Retrieved game with ID {id} successfully at {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}");
@@ -63,7 +64,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (id != game.GameId)
             {
-                return BadRequest();
+                return BadRequest("ID does not match.");
             }
 
             _context.Entry(game).State = EntityState.Modified;
@@ -78,7 +79,7 @@ namespace DigitalGamesMarketplace2.Controllers
                 if (!GameExists(id))
                 {
                     _logger.LogWarning($"Attempt to update non-existing game with ID {id}.");
-                    return NotFound();
+                    return NotFound("Game not found.");
                 }
                 else
                 {
@@ -116,7 +117,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (game == null)
             {
                 _logger.LogWarning($"Attempt to delete non-existing game with ID {id}.");
-                return NotFound();
+                return NotFound("Game not found.");
             }
 
             _context.Games.Remove(game);

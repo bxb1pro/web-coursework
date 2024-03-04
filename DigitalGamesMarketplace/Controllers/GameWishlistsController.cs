@@ -42,7 +42,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (gameWishlist == null)
             {
                 _logger.LogWarning($"Game wishlist with ID {id} not found.");
-                return NotFound();
+                return NotFound("Game wishlist not found.");
             }
 
             _logger.LogInformation($"Retrieved game wishlist with ID {id} successfully.");
@@ -63,7 +63,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (id != gameWishlist.GameWishlistId)
             {
                 _logger.LogWarning("Mismatch between route ID {RouteId} and game wishlist ID {GameWishlistId} in the request body.", id, gameWishlist.GameWishlistId);
-                return BadRequest();
+                return BadRequest("ID does not match.");
             }
 
             _context.Entry(gameWishlist).State = EntityState.Modified;
@@ -78,7 +78,7 @@ namespace DigitalGamesMarketplace2.Controllers
                 if (!GameWishlistExists(id))
                 {
                     _logger.LogWarning($"Game wishlist ID {id} not found for update.");
-                    return NotFound();
+                    return NotFound("Game wishlist not found.");
                 }
                 else
                 {
@@ -116,7 +116,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (gameWishlist == null)
             {
                 _logger.LogWarning($"Attempt to delete non-existing game wishlist with ID {id}.");
-                return NotFound();
+                return NotFound("Game wishlist not found.");
             }
 
             _context.GameWishlists.Remove(gameWishlist);

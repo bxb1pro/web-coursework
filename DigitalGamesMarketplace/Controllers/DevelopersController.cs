@@ -42,7 +42,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (developer == null)
             {
                 _logger.LogWarning($"Developer with ID {id} not found.");
-                return NotFound();
+                return NotFound("Developer not found.");
             }
 
             _logger.LogInformation($"Retrieved developer with ID {id} successfully.");
@@ -63,7 +63,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (id != developer.DeveloperId)
             {
-                return BadRequest();
+                return BadRequest("ID does not match.");
             }
 
             _context.Entry(developer).State = EntityState.Modified;
@@ -78,7 +78,7 @@ namespace DigitalGamesMarketplace2.Controllers
                 if (!DeveloperExists(id))
                 {
                     _logger.LogWarning($"Developer ID {id} not found for update.");
-                    return NotFound();
+                    return NotFound("Developer not found.");
                 }
                 else
                 {
@@ -116,7 +116,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (developer == null)
             {
                 _logger.LogWarning($"Attempt to delete developer with ID {id} failed as it does not exist.");
-                return NotFound();
+                return NotFound("Developer not found.");
             }
 
             _context.Developers.Remove(developer);
