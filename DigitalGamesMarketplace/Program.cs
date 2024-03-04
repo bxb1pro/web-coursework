@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DigitalGamesMarketplace2.Controllers;
 using DigitalGamesMarketplace2.Services;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<MarketplaceContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Connection")));
+
+// Extra addition to check for health of database connectivity at /health
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<MarketplaceContext>("Database");
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<MarketplaceContext>().AddDefaultTokenProviders();
@@ -59,6 +64,8 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 app.UseHttpsRedirection();
+
+app.MapHealthChecks("/health");
 
 var summaries = new[]
 {

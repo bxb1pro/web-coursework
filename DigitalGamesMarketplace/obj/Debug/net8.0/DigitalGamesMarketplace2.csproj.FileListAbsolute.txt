@@ -580,3 +580,6 @@
 /Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Debug/net8.0/DigitalGamesMarketplace2.pdb
 /Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Debug/net8.0/DigitalGamesMarketplace2.genruntimeconfig.cache
 /Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Debug/net8.0/ref/DigitalGamesMarketplace2.dll
+/Users/brad/Documents/Coursework/DigitalGamesMarketplace/bin/Debug/net8.0/Microsoft.Extensions.Diagnostics.HealthChecks.dll
+/Users/brad/Documents/Coursework/DigitalGamesMarketplace/bin/Debug/net8.0/Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
+/Users/brad/Documents/Coursework/DigitalGamesMarketplace/bin/Debug/net8.0/Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll
