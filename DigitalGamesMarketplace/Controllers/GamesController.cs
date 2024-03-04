@@ -12,6 +12,7 @@ namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class GamesController : ControllerBase
     {
         private readonly MarketplaceContext _context;
@@ -25,6 +26,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
         // GET: api/Games
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin,Admin,User")]
         public async Task<ActionResult<IEnumerable<Game>>> GetGames()
         {
             var games = await _context.Games.ToListAsync();

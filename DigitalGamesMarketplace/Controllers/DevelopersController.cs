@@ -12,6 +12,7 @@ namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class DevelopersController : ControllerBase
     {
         private readonly MarketplaceContext _context;
@@ -55,7 +56,8 @@ namespace DigitalGamesMarketplace2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("Update failed due to invalid model state for developer ID {id}.");
+                _logger.LogWarning("Update failed due to invalid model state for developer ID {DeveloperId}.", id);
+
                 return BadRequest(ModelState);
             }
 

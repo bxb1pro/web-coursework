@@ -7,7 +7,7 @@ namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class RolesController : ControllerBase
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -22,6 +22,7 @@ namespace DigitalGamesMarketplace2.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin, Admin")]
         public IActionResult GetRoles()
         {
             var roles = _roleManager.Roles.ToList();
@@ -30,6 +31,7 @@ namespace DigitalGamesMarketplace2.Controllers
         }
 
         [HttpGet("{roleId}")]
+        [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> GetRole(string roleId)
         {
             var role = await _roleManager.FindByIdAsync(roleId);
@@ -114,6 +116,7 @@ namespace DigitalGamesMarketplace2.Controllers
         }
 
         [HttpPost("assign-role-to-user")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> AssignRoleToUser([FromBody] AssignRoleModel model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
@@ -130,6 +133,12 @@ namespace DigitalGamesMarketplace2.Controllers
             {
                 _logger.LogWarning($"Assign role operation failed. Role {model.RoleName} not found.");
                 return NotFound("Role not found.");
+            }
+
+            // Prevent Admin from assigning roles of Admin or SuperAdmin
+            if (User.IsInRole("Admin") && (model.RoleName == "Admin" || model.RoleName == "SuperAdmin"))
+            {
+                return Forbid("Admins cannot assign Admin or SuperAdmin roles.");
             }
 
             var result = await _userManager.AddToRoleAsync(user, model.RoleName);

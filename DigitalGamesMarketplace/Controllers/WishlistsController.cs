@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DigitalGamesMarketplace2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class WishlistsController : ControllerBase
     {
         private readonly MarketplaceContext _context;
@@ -24,6 +26,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
         // GET: api/Wishlists
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin,Admin,User")]
         public async Task<ActionResult<IEnumerable<Wishlist>>> GetWishlists()
         {
             var wishlists = await _context.Wishlists.ToListAsync();

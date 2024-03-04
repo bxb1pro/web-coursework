@@ -5,6 +5,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using DigitalGamesMarketplace2.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace DigitalGamesMarketplace2.Controllers
 {

@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DigitalGamesMarketplace2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class GameWishlistsController : ControllerBase
     {
         private readonly MarketplaceContext _context;
@@ -54,12 +56,13 @@ namespace DigitalGamesMarketplace2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("Update failed due to invalid model state for game wishlist ID {id}.");
+                _logger.LogWarning("Update failed due to invalid model state for game wishlist ID {id}.", id);
                 return BadRequest(ModelState);
             }
 
             if (id != gameWishlist.GameWishlistId)
             {
+                _logger.LogWarning("Mismatch between route ID {RouteId} and game wishlist ID {GameWishlistId} in the request body.", id, gameWishlist.GameWishlistId);
                 return BadRequest();
             }
 
