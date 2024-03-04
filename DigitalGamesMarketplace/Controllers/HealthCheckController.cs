@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-// Extra addition to check health and availability of endpoints
+// Extra additional feature to check health and availability of endpoints
 namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]

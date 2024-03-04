@@ -38,6 +38,9 @@
 /Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Release/net8.0/PubTmp/Out/Microsoft.EntityFrameworkCore.Sqlite.dll
 /Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Release/net8.0/PubTmp/Out/Microsoft.EntityFrameworkCore.SqlServer.dll
 /Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Release/net8.0/PubTmp/Out/Microsoft.Extensions.DependencyModel.dll
+/Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Release/net8.0/PubTmp/Out/Microsoft.Extensions.Diagnostics.HealthChecks.dll
+/Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Release/net8.0/PubTmp/Out/Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
+/Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Release/net8.0/PubTmp/Out/Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll
 /Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Release/net8.0/PubTmp/Out/Microsoft.Extensions.Identity.Core.dll
 /Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Release/net8.0/PubTmp/Out/Microsoft.Extensions.Identity.Stores.dll
 /Users/brad/Documents/Coursework/DigitalGamesMarketplace/obj/Release/net8.0/PubTmp/Out/Microsoft.Extensions.Options.dll

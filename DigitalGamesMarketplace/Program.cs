@@ -22,7 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<MarketplaceContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Connection")));
 
-// Extra addition to check for health of database connectivity at /health
+// Extra additional feature to check for health of database connectivity at /health
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<MarketplaceContext>("Database");
 
@@ -65,6 +65,7 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 app.UseHttpsRedirection();
 
+// Extra additional feature for database health connectivity endpoint
 app.MapHealthChecks("/health");
 
 var summaries = new[]
